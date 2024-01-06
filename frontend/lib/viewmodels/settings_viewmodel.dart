@@ -79,4 +79,9 @@ class SettingsViewModel extends ChangeNotifier {
       await _prefsService.setInt('continuousModeSteps', _continuousModeSteps);
     }
   }
+
+  // Method to sign out
+  Future<void> signOut() async {
+    await _authService.signOut();
+  }
 }
