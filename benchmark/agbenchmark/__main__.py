@@ -14,17 +14,6 @@ from agbenchmark.utils.logging import configure_logging
 
 load_dotenv()
 
-try:
-    if os.getenv("HELICONE_API_KEY"):
-        import helicone  # noqa
-
-        helicone_enabled = True
-    else:
-        helicone_enabled = False
-except ImportError:
-    helicone_enabled = False
-
-
 class InvalidInvocationError(ValueError):
     pass
 
@@ -33,15 +22,6 @@ logger = logging.getLogger(__name__)
 
 BENCHMARK_START_TIME_DT = datetime.now(timezone.utc)
 BENCHMARK_START_TIME = BENCHMARK_START_TIME_DT.strftime("%Y-%m-%dT%H:%M:%S+00:00")
-
-
-if helicone_enabled:
-    from helicone.lock import HeliconeLockManager
-
-    HeliconeLockManager.write_custom_property(
-        "benchmark_start_time", BENCHMARK_START_TIME
-    )
-
 
 @click.group(cls=DefaultGroup, default_if_no_args=True)
 @click.option("--debug", is_flag=True, help="Enable debug output")

@@ -6,9 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-HELICONE_GRAPHQL_LOGS = os.getenv("HELICONE_GRAPHQL_LOGS", "").lower() == "true"
-
-
 def get_list_of_file_paths(
     challenge_dir_path: str | Path, artifact_folder_name: str
 ) -> list[Path]:

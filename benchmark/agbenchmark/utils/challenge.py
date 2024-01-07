@@ -64,11 +64,6 @@ class Challenge(ABC):
         # skip optional categories
         self.skip_optional_categories(config)
 
-        if os.environ.get("HELICONE_API_KEY"):
-            from helicone.lock import HeliconeLockManager
-
-            HeliconeLockManager.write_custom_property("challenge", self.data.name)
-
         timeout = self.data.cutoff or 60
 
         if request.config.getoption("--nc"):
