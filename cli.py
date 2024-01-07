@@ -373,7 +373,6 @@ def start(agent_name, subprocess_args):
     benchmark_script = os.path.join(agent_dir, "run_benchmark")
     if os.path.exists(agent_dir) and os.path.isfile(benchmark_script):
         os.chdir(agent_dir)
-        print("runnign subprocess"+str(subprocess_args))
         subprocess.Popen([benchmark_script, *subprocess_args], cwd=agent_dir)
         click.echo(
             click.style(
