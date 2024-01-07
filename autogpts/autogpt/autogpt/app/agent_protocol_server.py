@@ -265,6 +265,8 @@ class AgentProtocolServer:
                 status="completed",
                 output=f"An error occurred while proposing the next action: {e}",
             )
+            import traceback
+            traceback.print_exc()
             return step
 
         # Format step output
