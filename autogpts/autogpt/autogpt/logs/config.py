@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
 from auto_gpt_plugin_template import AutoGPTPluginTemplate
-from openai.util import logger as openai_logger
+from openai._utils._logs import logger as openai_logger
 
 if TYPE_CHECKING:
     from autogpt.config import Config

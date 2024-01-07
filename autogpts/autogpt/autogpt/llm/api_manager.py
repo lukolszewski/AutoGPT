@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import logging
+import os
 from typing import List, Optional
 
 from openai import OpenAI
 
-client = OpenAI()
+if 'OPENAI_API_BASE_URL' in os.environ:
+    client = OpenAI(base_url=os.environ.get('OPENAI_API_BASE_URL'), api_key = os.getenv('OPENAI_API_KEY', None))
+else:
+    client = OpenAI(api_key = os.getenv('OPENAI_API_KEY', None))
+
 from openai import Model
 
 from autogpt.core.resource.model_providers.openai import OPEN_AI_MODELS
@@ -107,7 +112,7 @@ class ApiManager(metaclass=Singleton):
 
         """
         if self.models is None:
-            all_models = client.models.list(**openai_credentials)["data"]
+            all_models = client.models.list().data
             self.models = all_models
 
         return self.models

@@ -3,6 +3,7 @@ Test cases for the config class, which handles the configuration settings
 for the AI and ensures it behaves as a singleton.
 """
 import os
+import openai
 from typing import Any
 from unittest import mock
 from unittest.mock import patch
@@ -190,7 +191,7 @@ azure_model_map:
 
 def test_create_config_gpt4only(config: Config) -> None:
     with mock.patch("autogpt.llm.api_manager.ApiManager.get_models") as mock_get_models:
-        mock_get_models.return_value = [{"id": GPT_4_MODEL}]
+        mock_get_models.return_value = [openai.Model(id=GPT_4_MODEL)]
         apply_overrides_to_config(
             config=config,
             gpt4only=True,
@@ -201,7 +202,7 @@ def test_create_config_gpt4only(config: Config) -> None:
 
 def test_create_config_gpt3only(config: Config) -> None:
     with mock.patch("autogpt.llm.api_manager.ApiManager.get_models") as mock_get_models:
-        mock_get_models.return_value = [{"id": GPT_3_MODEL}]
+        mock_get_models.return_value = [openai.Model(id=GPT_3_MODEL)]
         apply_overrides_to_config(
             config=config,
             gpt3only=True,

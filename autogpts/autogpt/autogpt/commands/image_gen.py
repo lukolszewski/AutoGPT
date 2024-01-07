@@ -2,6 +2,7 @@
 
 import io
 import json
+import os
 import logging
 import time
 import uuid
@@ -10,7 +11,11 @@ from pathlib import Path
 
 from openai import OpenAI
 
-client = OpenAI()
+if 'OPENAI_API_BASE_URL' in os.environ:
+    client = OpenAI(base_url=os.environ.get('OPENAI_API_BASE_URL'), api_key = os.getenv('OPENAI_API_KEY', None))
+else:
+    client = OpenAI(api_key = os.getenv('OPENAI_API_KEY', None))
+
 import requests
 from PIL import Image
 

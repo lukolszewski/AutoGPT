@@ -2,8 +2,13 @@ import typing
 
 from openai import OpenAI, AsyncOpenAI
 
-client = OpenAI()
-aclient = AsyncOpenAI()
+if 'OPENAI_API_BASE_URL' in os.environ:
+    client = OpenAI(base_url=os.environ.get('OPENAI_API_BASE_URL'), api_key = os.getenv('OPENAI_API_KEY', None))
+    aclient = AsyncOpenAI(base_url=os.environ.get('OPENAI_API_BASE_URL'), api_key = os.getenv('OPENAI_API_KEY', None))
+else:
+    client = OpenAI(api_key = os.getenv('OPENAI_API_KEY', None))
+    aclient = AsyncOpenAI(api_key = os.getenv('OPENAI_API_KEY', None))
+    
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 from .sdk.forge_log import ForgeLogger

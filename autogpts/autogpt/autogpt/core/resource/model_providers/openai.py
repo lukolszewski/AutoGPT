@@ -12,7 +12,8 @@ from openai import AsyncOpenAI
 aclient = AsyncOpenAI()
 import tiktoken
 import yaml
-from openai.error import APIError, RateLimitError
+import openai
+from openai import APIError, RateLimitError
 from pydantic import SecretStr
 
 from autogpt.core.configuration import Configurable, UserConfigurable

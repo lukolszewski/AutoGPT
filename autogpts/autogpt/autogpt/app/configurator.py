@@ -191,7 +191,7 @@ def check_model(
     """Check if model is available for use. If not, return gpt-3.5-turbo."""
     api_manager = ApiManager()
     models = api_manager.get_models(**api_credentials.get_api_access_kwargs(model_name))
-    if any(model_name in m["id"] for m in models):
+    if any(model_name in m.id for m in models):
         return model_name
 
     logger.warning(

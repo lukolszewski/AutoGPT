@@ -85,5 +85,5 @@ class TestApiManager:
             mock_list_models.return_value = {"data": [{"id": "gpt-3.5-turbo"}]}
             result = api_manager.get_models()
 
-            assert result[0]["id"] == "gpt-3.5-turbo"
-            assert api_manager.models[0]["id"] == "gpt-3.5-turbo"
+            assert result[0].id == "gpt-3.5-turbo"
+            assert api_manager.models[0].id == "gpt-3.5-turbo"
