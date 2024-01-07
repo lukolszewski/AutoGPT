@@ -80,7 +80,7 @@ def test_set_smart_llm(config: Config) -> None:
     config.smart_llm = smart_llm
 
 
-@patch("openai.Model.list")
+@patch("openai.resources.Models.list")
 def test_smart_and_fast_llms_set_to_gpt4(mock_list_models: Any, config: Config) -> None:
     """
     Test if models update to gpt-3.5-turbo if gpt-4 is not available.

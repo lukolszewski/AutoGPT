@@ -3,7 +3,9 @@ from __future__ import annotations
 import logging
 from typing import List, Optional
 
-import openai
+from openai import OpenAI
+
+client = OpenAI()
 from openai import Model
 
 from autogpt.core.resource.model_providers.openai import OPEN_AI_MODELS
@@ -105,7 +107,7 @@ class ApiManager(metaclass=Singleton):
 
         """
         if self.models is None:
-            all_models = openai.Model.list(**openai_credentials)["data"]
+            all_models = client.models.list(**openai_credentials)["data"]
             self.models = all_models
 
         return self.models

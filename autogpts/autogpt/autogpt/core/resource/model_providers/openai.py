@@ -7,7 +7,9 @@ import time
 from pathlib import Path
 from typing import Callable, Optional, ParamSpec, TypeVar
 
-import openai
+from openai import AsyncOpenAI
+
+aclient = AsyncOpenAI()
 import tiktoken
 import yaml
 from openai.error import APIError, RateLimitError
@@ -547,10 +549,8 @@ async def _create_embedding(text: str, *_, **kwargs) -> openai.Embedding:
     Returns:
         str: The embedding.
     """
-    return await openai.Embedding.acreate(
-        input=[text],
-        **kwargs,
-    )
+    return await aclient.embeddings.create(input=[text],
+    **kwargs)
 
 
 async def _create_chat_completion(
@@ -568,10 +568,8 @@ async def _create_chat_completion(
         message.dict(include={"role", "content", "tool_calls", "name"})
         for message in messages
     ]
-    return await openai.ChatCompletion.acreate(
-        messages=raw_messages,
-        **kwargs,
-    )
+    return await aclient.chat.completions.create(messages=raw_messages,
+    **kwargs)
 
 
 class _OpenAIRetryHandler:
