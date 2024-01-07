@@ -303,8 +303,11 @@ def stop():
     import signal
     import subprocess
 
+    port = os.getenv('PORT', 8000)
+    agent_port = os.getenv('AGENT_PORT', 8080)
+
     try:
-        pids = subprocess.check_output(["lsof", "-t", "-i", ":8000"]).split()
+        pids = subprocess.check_output(["lsof", "-t", "-i", ":"+str(agent_port)]).split()
         if isinstance(pids, int):
             os.kill(int(pids), signal.SIGTERM)
         else:
@@ -314,7 +317,7 @@ def stop():
         click.echo("No process is running on port 8000")
 
     try:
-        pids = int(subprocess.check_output(["lsof", "-t", "-i", ":8080"]))
+        pids = int(subprocess.check_output(["lsof", "-t", "-i", ":"+str(port)]))
         if isinstance(pids, int):
             os.kill(int(pids), signal.SIGTERM)
         else:
@@ -370,6 +373,7 @@ def start(agent_name, subprocess_args):
     benchmark_script = os.path.join(agent_dir, "run_benchmark")
     if os.path.exists(agent_dir) and os.path.isfile(benchmark_script):
         os.chdir(agent_dir)
+        print("runnign subprocess"+str(subprocess_args))
         subprocess.Popen([benchmark_script, *subprocess_args], cwd=agent_dir)
         click.echo(
             click.style(

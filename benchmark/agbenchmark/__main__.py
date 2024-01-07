@@ -169,7 +169,7 @@ def serve(port: Optional[int] = None):
     app = setup_fastapi_app(config)
 
     # Run the FastAPI application using uvicorn
-    port = port or int(os.getenv("PORT", 8080))
+    port = port or int(os.getenv("BENCHMARK_PORT", 8080))
     uvicorn.run(app, host="0.0.0.0", port=port)
 
 
