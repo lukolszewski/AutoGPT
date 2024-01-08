@@ -47,6 +47,9 @@ OpenAIChatParser = Callable[[str], dict]
 class OpenAIModelName(str, enum.Enum):
     ADA = "text-embedding-ada-002"
 
+    CUSTOM_LLAMA2_v1 = "llama2"
+    CUSTOM_MIXTRAL_v1 = "pygmalion"
+
     GPT3_v1 = "gpt-3.5-turbo-0301"
     GPT3_v2 = "gpt-3.5-turbo-0613"
     GPT3_v2_16k = "gpt-3.5-turbo-16k-0613"
@@ -83,6 +86,24 @@ OPEN_AI_EMBEDDING_MODELS = {
 OPEN_AI_CHAT_MODELS = {
     info.name: info
     for info in [
+        ChatModelInfo(
+            name=OpenAIModelName.CUSTOM_LLAMA2_v1,
+            service=ModelProviderService.CHAT,
+            provider_name=ModelProviderName.OPENAI,
+            prompt_token_cost=0.0015 / 1000,
+            completion_token_cost=0.002 / 1000,
+            max_tokens=4096,
+            has_function_call_api=False,
+        ),
+        ChatModelInfo(
+            name=OpenAIModelName.CUSTOM_MIXTRAL_v1,
+            service=ModelProviderService.CHAT,
+            provider_name=ModelProviderName.OPENAI,
+            prompt_token_cost=0.0015 / 1000,
+            completion_token_cost=0.002 / 1000,
+            max_tokens=4096,
+            has_function_call_api=False,
+        ),
         ChatModelInfo(
             name=OpenAIModelName.GPT3,
             service=ModelProviderService.CHAT,
@@ -298,7 +319,10 @@ class OpenAIProvider(
 
     @classmethod
     def get_tokenizer(cls, model_name: OpenAIModelName) -> ModelTokenizer:
-        return tiktoken.encoding_for_model(model_name)
+        if model_name.startswith("llama2") or model_name.startswith("pygmalion"):
+            return tiktoken.encoding_for_model("gpt-3.5-turbo")
+        else:
+            return tiktoken.encoding_for_model(model_name)
 
     @classmethod
     def count_tokens(cls, text: str, model_name: OpenAIModelName) -> int:
@@ -324,6 +348,10 @@ class OpenAIProvider(
             tokens_per_message = 3
             tokens_per_name = 1
             encoding_model = "gpt-4"
+        elif model_name.startswith("llama2") or model_name.startswith("pygmalion"):
+            tokens_per_message = 3
+            tokens_per_name = 1
+            encoding_model = "gpt-3.5-turbo"
         else:
             raise NotImplementedError(
                 f"count_message_tokens() is not implemented for model {model_name}.\n"
