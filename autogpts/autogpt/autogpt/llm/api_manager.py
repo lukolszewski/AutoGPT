@@ -106,6 +106,6 @@ class ApiManager(metaclass=Singleton):
         """
         if self.models is None:
             all_models = openai.Model.list(**openai_credentials)["data"]
-            self.models = [model for model in all_models if "gpt" in model["id"]]
+            self.models = all_models
 
         return self.models

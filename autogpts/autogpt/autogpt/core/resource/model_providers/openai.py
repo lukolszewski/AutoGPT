@@ -111,7 +111,7 @@ OPEN_AI_CHAT_MODELS = {
             prompt_token_cost=0.0015 / 1000,
             completion_token_cost=0.002 / 1000,
             max_tokens=4096,
-            has_function_call_api=True,
+            has_function_call_api=False,
         ),
         ChatModelInfo(
             name=OpenAIModelName.GPT3_16k,
@@ -120,7 +120,7 @@ OPEN_AI_CHAT_MODELS = {
             prompt_token_cost=0.003 / 1000,
             completion_token_cost=0.004 / 1000,
             max_tokens=16384,
-            has_function_call_api=True,
+            has_function_call_api=False,
         ),
         ChatModelInfo(
             name=OpenAIModelName.GPT3_v3,
@@ -129,7 +129,7 @@ OPEN_AI_CHAT_MODELS = {
             prompt_token_cost=0.001 / 1000,
             completion_token_cost=0.002 / 1000,
             max_tokens=16384,
-            has_function_call_api=True,
+            has_function_call_api=False,
         ),
         ChatModelInfo(
             name=OpenAIModelName.GPT4,
@@ -138,7 +138,7 @@ OPEN_AI_CHAT_MODELS = {
             prompt_token_cost=0.03 / 1000,
             completion_token_cost=0.06 / 1000,
             max_tokens=8191,
-            has_function_call_api=True,
+            has_function_call_api=False,
         ),
         ChatModelInfo(
             name=OpenAIModelName.GPT4_32k,
@@ -147,7 +147,7 @@ OPEN_AI_CHAT_MODELS = {
             prompt_token_cost=0.06 / 1000,
             completion_token_cost=0.12 / 1000,
             max_tokens=32768,
-            has_function_call_api=True,
+            has_function_call_api=False,
         ),
         ChatModelInfo(
             name=OpenAIModelName.GPT4_v3,
@@ -156,7 +156,7 @@ OPEN_AI_CHAT_MODELS = {
             prompt_token_cost=0.01 / 1000,
             completion_token_cost=0.03 / 1000,
             max_tokens=128000,
-            has_function_call_api=True,
+            has_function_call_api=False,
         ),
     ]
 }
@@ -771,6 +771,8 @@ def _tool_calls_compat_extract_calls(response: str) -> list[AssistantToolCallDic
         if not block:
             raise ValueError("Could not find tool calls block in response")
         tool_calls: list[AssistantToolCallDict] = json.loads(block.group(1))
+        if isinstance(tool_calls, dict) and "tool_calls" in tool_calls.keys():
+            tool_calls = tool_calls["tool_calls"]
 
     for t in tool_calls:
         t["function"]["arguments"] = str(t["function"]["arguments"])  # HACK
